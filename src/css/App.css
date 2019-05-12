@@ -1,0 +1,67 @@
+body {
+  margin: 0;
+  padding: 0;
+  top: 0;
+  background-color:#f9f9f9;
+}
+
+header {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.earth {
+  position: absolute;
+  top: 650px;
+  bottom:0;
+  right: 0;
+  left:0;
+  margin: auto;
+  border-radius: 50%;
+  background:   url("https://i.ibb.co/52jr26S/earthcanvas.png"), linear-gradient(90deg, rgba(130,255,226,1) 0%, rgba(130,255,226,1) 18%, rgba(123,252,255,1) 50%, rgba(130,255,226,1) 83%, rgba(130,255,226,1) 100%);
+  background-repeat: repeat-x;
+  background-size: cover;
+  box-shadow: -50px -24px 45px rgba(0,0,0,0.4) inset;
+  animation: spin 60s linear infinite;
+  filter: drop-shadow(0 0 1.5rem rgba(0,0,0,0.25));
+  opacity: 1;
+  transition: 2s;
+}
+
+.smaller {
+  width: 125px !important;
+  height: 125px !important;
+  top:0;
+  transition: 3s !important;
+  transition-delay: 1s !important;
+  
+}
+
+.headerSmall {
+  height: 20vh !important;
+  transition: 6s;
+  overflow-x: unset;
+}
+
+@keyframes spin {
+  0% {
+    background-position: 0 0; }
+  100% {
+    background-position: -4500px 0; }
+}
+
+
+.appBlock {
+  min-height: 60vh;
+
+}
+
+.appBlockCard {
+  min-height: calc(55vh / 5);
+  margin-bottom: calc(55vh / 35);
+  padding: 10px;
+
+}
+
