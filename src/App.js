@@ -7,9 +7,6 @@ import 'animate.css';
 
 // Components
 import HeaderComponent from './components/header';
-import Main from './components/Main';
-
-
 
 function App() {
   return (

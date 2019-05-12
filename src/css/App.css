@@ -54,8 +54,8 @@ header {
 
 
 .appBlock {
-  min-height: 60vh;
-
+  min-height: 70vh;
+  position: relative;
 }
 
 .appBlockCard {
