@@ -26,7 +26,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
-
+import { RotationContext } from '../../Main'
 
 
 export default () => {
@@ -65,7 +65,8 @@ export default () => {
         setAircraft([...aircraft, newAircraft])
         setModal(false)
     }
-    
+
+
     return(
         <div>
              <Dialog
@@ -130,35 +131,41 @@ export default () => {
                     {
                         aircraft.map((item,i)=>{
                             return(
-                                    <ListItem button >
-                                        <ListItemText primary={
-                                            <Paper style={{minHeight: "1.5em", padding: 8, minWidth: "100%"}}>
-                                                <Typography variant="title" align="center">
-                                                    {item.ident}
-                                                </Typography>
-                                                <Grid lg={12} container>
-                                                    <Grid item lg={5}>
-                                                        <Typography variant="subtitle1">
-                                                            {item.type}
-                                                        </Typography>
-                                                        <Typography variant="subtitle2">
-                                                            {item.economySeats}
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid item lg={2} alignContent="center">
-                                                        <ArrowIcon style={{fontSize: "3em",}}/>
-                                                    </Grid>
-                                                    <Grid item lg={5} alignContent="right" justify="flex-end">
-                                                                    
-                                                        <Typography variant="subtitle1" align="right">
-                                                            {item.base}
-                                                        </Typography>
-                
-                                                    </Grid>
-                                                </Grid>
-                                            </Paper>
-                                        } />
-                                    </ListItem>
+                                <RotationContext.Consumer>
+                                    {(context) => (
+                                         <ListItem button >
+                                         <ListItemText primary={
+                                             <Paper style={{minHeight: "1.5em", padding: 8, minWidth: "100%"}}>
+                                                 <Typography variant="title" align="center">
+                                                     {item.ident}
+                                                 </Typography>
+                                                 <Grid lg={12} container>
+                                                     <Grid item lg={5}>
+                                                         <Typography variant="subtitle1">
+                                                             {item.type}
+                                                         </Typography>
+                                                         <Typography variant="subtitle2">
+                                                             {item.economySeats}
+                                                         </Typography>
+                                                     </Grid>
+                                                     <Grid item lg={2} alignContent="center">
+                                                         <ArrowIcon style={{fontSize: "3em",}}/>
+                                                     </Grid>
+                                                     <Grid item lg={5} alignContent="right" justify="flex-end">
+                                                                     
+                                                         <Typography variant="subtitle1" align="right">
+                                                             {item.base}
+                                                         </Typography>
+                 
+                                                     </Grid>
+                                                 </Grid>
+                                                usage: {context.state[0].usage + "%"}
+                                             </Paper>
+                                         } />
+                                     </ListItem>
+                                    )}
+                                </RotationContext.Consumer>
+                                   
                                 )
                             })
                     }

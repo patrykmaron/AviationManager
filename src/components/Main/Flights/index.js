@@ -18,6 +18,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 
 // Get rotation state
 import { RotationContext } from '../../Main';
+import Rotation from '../Rotation';
 
 
 
@@ -25,12 +26,9 @@ export default () => {
         
     // Initial States
     const [flight, setFlight] = useState([]); // Flights
-    const [pagination, setPagination] = useState({"offset":0,"limit":5,"total":0}); // Pagination
+    const [pagination, setPagination] = useState({"offset":0,"limit":4,"total":0}); // Pagination
     const [loading, setLoader] = useState(true) // Suspense loader
     const [selected, setSelected] = useState([]);
-
-
-    const [rotations, setRotations] = useContext(RotationContext);
 
     // Fetch and set
 
@@ -56,72 +54,86 @@ export default () => {
         fetchUrl(pagination.offset, pagination.limit);
     }, []);
     
-    function handleSelect(flight){
-        var arr = selected;
-        if (selected.indexOf(flight) > -1) {
-            var index = selected.indexOf(flight);    // <-- Not supported in <IE9
+   
+    function calcUsage(currentFlights, newFlight){ // this could be done cleaner
+        
+        var arr = []
+
+        if(currentFlights.length > 0){
+            currentFlights.map((item,i) => {
+                item.map((data, i) => {
+                    arr.push((data.arrivaltime - data.departuretime))
+                })
             
-            if (index !== -1) {
-                arr.splice(index, 1);
-            }
-            setSelected(arr)
+            })
+        }
+        if (arr.length > 0){
+            arr.push((newFlight.arrivaltime - newFlight.departuretime))
         } else {
-            arr = [...arr, flight]
-            setSelected(arr)
+            arr = [(newFlight.arrivaltime - newFlight.departuretime)]
+        }
+        const sum = arr.reduce(add,0)
+        
+        function add(accumulator, a){
+            return accumulator + a
         }
 
-        rotations.map((item, i) => {
-            if(item.selected === 1){
-                var temp = rotations;
-                temp[i].flights = arr;
-                setRotations(temp);
-                
-            }
-        })
-
+        return Math.round((sum / 86400) * 100) // rounding to the nearest interger
+       
     }
-
-    
     
     return(
+        
         <div>
             
                 <List>
                     {
                         flight.map((item,i)=>{
+                           
                             return(
-                                    <ListItem button onClick={() => handleSelect(item.id)} >
-                                        <ListItemText primary={
-                                            <Paper style={{minHeight: "1.5em", padding: 8, minWidth: "100%"}}>
-                                                <Typography variant="title" align="center">
-                                                    {item.id}
-                                                </Typography>
-                                                <Grid lg={12} container>
-                                                    <Grid item lg={5}>
-                                                        <Typography variant="subtitle1">
-                                                            {item.origin}
-                                                        </Typography>
-                                                        <Typography variant="subtitle2">
-                                                            {item.readable_departure}
-                                                        </Typography>
+                                <RotationContext.Consumer>
+                                    {
+                                        (context) => (
+                                            <ListItem button onClick={() => context.eventTrigger([{"aircraft":"GABCD","flights":[...context.state[0].flights, item], "selected":1, "usage":calcUsage([context.state[0].flights],item)}])} >
+                                            <ListItemText primary={
+                                                <Paper style={{minHeight: "0.7em", padding: 5, minWidth: "100%"}}>
+                                                    <Typography variant="title" align="center">
+                                                        {item.id}
+                                                    </Typography>
+                                                    <Grid lg={12} container>
+                                                        <Grid item lg={5}>
+                                                            <Typography variant="subtitle1">
+                                                                {item.origin}
+                                                            </Typography>
+                                                            <Typography variant="subtitle2">
+                                                                {item.readable_departure}
+                                                            </Typography>
+                                                        </Grid>
+                                                        <Grid item lg={2} alignContent="center">
+                                                            <ArrowIcon style={{fontSize: "3em",}}/>
+                                                        </Grid>
+                                                        <Grid item lg={5} alignContent="right" justify="flex-end">
+                                                                        
+                                                            <Typography variant="subtitle1" align="right">
+                                                                {item.destination}
+                                                            </Typography>
+                                                        <Typography variant="subtitle2" align="right">
+                                                                {item.readable_arrival}
+                                                            </Typography>
+                                                        </Grid>
                                                     </Grid>
-                                                    <Grid item lg={2} alignContent="center">
-                                                        <ArrowIcon style={{fontSize: "3em",}}/>
-                                                    </Grid>
-                                                    <Grid item lg={5} alignContent="right" justify="flex-end">
-                                                                    
-                                                        <Typography variant="subtitle1" align="right">
-                                                            {item.destination}
-                                                        </Typography>
-                                                    <Typography variant="subtitle2" align="right">
-                                                            {item.readable_arrival}
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                            </Paper>
-                                        } />
-                                    </ListItem>
-                                )
+                                                </Paper>
+                                            } />
+                                        </ListItem>
+                                        )
+                                    }
+                                </RotationContext.Consumer>
+                                
+                                     
+                                        )
+                                 
+                                   
+                                
                             })
                     }
                     
@@ -132,7 +144,7 @@ export default () => {
                         page={pagination.offset}
                         rowsPerPage={pagination.limit}
                         count={pagination.total}
-                        rowsPerPageOptions={[5,10,15,25,50,100]}
+                        rowsPerPageOptions={[4,10,15,25,50,100]}
                         onChangePage={(obj,page) => {fetchUrl(page, pagination.limit)}}
                         onChangeRowsPerPage={(obj) => { fetchUrl(pagination.offset, obj.target.value)}}
                     />

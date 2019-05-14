@@ -14,18 +14,13 @@ import Aircrafts from './Aircrafts';
 
 export const RotationContext = React.createContext([{"aircraft":"A320","flights":[], "selected":1}]) // Creating "store" using context API
 
-// How am I going to handle rotation:
-// Select Aircraft, then add Flights to it untill 100% usage.
-/**
- *      [{"aircraft":"","flights":[], "selected": 0}]
- */
 
 function Main(props) {
-    const [rotations, setRotations] = useState([{"aircraft":"","flights":[], "selected":1}]) // creating rotation array that can be accessed globally
+    const [rotations, setRotations] = useState([{"aircraft":"GABCD","flights":[], "selected":1, "usage": 0}]) // creating rotation array that can be accessed globally
 
         if(props.Visible === true){
             return (
-                <RotationContext.Provider value={[rotations, setRotations]}> {/* Here we are proving the state store we created using Context API and Hook */}
+                <RotationContext.Provider value={{state:rotations,eventTrigger: (data)=> setRotations(data)}}> {/* Here we are proving the state store we created using Context API and Hook */}
                     <Grid container className="Main" lg={12} justify="center">
                         <Grid container lg={9} spacing={24}>
                             
