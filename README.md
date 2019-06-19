@@ -1,5 +1,5 @@
 ## Aviation Manager by Patryk Maron
-[**Click here for LIVE DEMO**](https://aviation-manager.herokuapp.com/)
+[**Click here for LIVE DEMO**](https://aviationmanager.herokuapp.com/)
 This app has been bootstrapped using create react app and for UI framework I have used Material UI library.
 Spent time: Aprrox. 6hours
 
